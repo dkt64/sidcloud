@@ -10,7 +10,9 @@
   "dependencies": {
     "axios": "^0.19.0",
     "core-js": "^2.6.5",
-    "vue": "^2.6.10"
+    "howler": "^2.1.2",
+    "vue": "^2.6.10",
+    "vue-howler": "^0.7.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.0",
