@@ -2,39 +2,10 @@
   <div id="app">
     <p>Welcome to SIDCloud</p>
 
-    <!-- <div>
-    <span>Total duration: {{ duration }} seconds</span>
-    <span>Progress: {{ (progress * 100) }}%</span>
-    <button @click="togglePlayback">{{ playing ? 'Pause' : 'Play' }}</button>
-    <button @click="stop">Stop</button>
-    </div>-->
-
-    <!-- <audio id="audio" controls autoplay preload="none">
-        <source :src=query_url type="audio/wav" />
-    </audio>-->
-    <!-- <audio
-      src="http://localhost:8099/api/v1/audio"
-      id="radio"
-      preload="none"
-      type="audio/wav"
-      controls
-    ></audio>-->
-
     <audio id="radio" controls preload="none">
       <source src="http://localhost:8099/api/v1/audio" type="audio/wav" />
     </audio>
     <p />
-
-    <!-- <audio id="audio">
-        <source src="http://localhost:8099/api/v1/audio" type="audio/wav" />
-      </audio>
-      <div class="player-controls">
-        <div id="radioIcon"></div>
-        <button id="playAudio"></button>
-        <p>
-          <small id="currentTime">00:00</small>
-        </p>
-    </div>-->
 
     <input
       class="form-control"
@@ -56,12 +27,8 @@
 
 <script>
 import axios from "axios";
-// import {Howl} from 'howler';
-
-// var track = new Audio("http://localhost:8099/api/v1/audio")
 
 export default {
-  // mixins: [VueHowler],
   data: function() {
     return {
       handle_id: 0,
@@ -69,7 +36,7 @@ export default {
       info: null,
       sid_link: null,
       sid_data: null,
-      query_url: null
+      query_url: ""
     };
   },
   name: "app",
@@ -89,6 +56,7 @@ export default {
       // eslint-disable-next-line
       console.log("Scener " + this.handle_name);
     },
+
     // ==========================================================
     // Odtworzenie SIDa
     // ==========================================================
@@ -97,34 +65,24 @@ export default {
       // eslint-disable-next-line
       console.log("Query = " + query);
 
-      this.query_url = "http://localhost:8099/api/v1/audio";
+      var player = document.getElementById("radio");
 
-      // document.getElementById('audio').currentTime = 0
-      // document.getElementById('audio').play()
+      player.pause();
+      player.currentTime = 0.0;
 
-      axios.post(query).then(response => (this.sid_data = response.data));
-      // axios.post(query);
+      axios.post(query).then(response => {
+        this.sid_data = response.data;
 
-      // var sound = new Howl({
-      //   src: ["http://localhost:8099/api/v1/audio"],
-      //   format: ['wav'],
-      //   html5: true
-      // });
+        // eslint-disable-next-line
+        console.log("SID data " + this.sid_data);
 
-      // sound.play()
+        player.load();
+        player.play();
+      });
 
-      // track.play()
-
-      // var player = document.getElementById("radio");
+      // player.currentTime = 0.0;
       // player.pause();
-      // player.src = this.query_url;
-      // player.play()
-
-      // media.play();
-      // axios.get(this.query_url)
-
-      // eslint-disable-next-line
-      // console.log("SID data " + this.sid_data);
+      // player.currentTime = 0.0;
     }
   }
 };
