@@ -3,7 +3,7 @@
     <p>Welcome to SIDCloud</p>
 
     <audio id="radio" controls preload="none">
-      <source src="http://localhost:8099/api/v1/audio" type="audio/wav" />
+      <source src="http://localhost/api/v1/audio" type="audio/wav" />
     </audio>
     <p />
 
@@ -15,13 +15,13 @@
     />
     <p>{{ sid_data }}</p>
 
-    <input
+    <!-- <input
       class="form-control"
       v-model="handle_id"
       v-on:keyup.enter="Handle"
       placeholder="Type scener handle"
     />
-    <p>{{ handle_name }}</p>
+    <p>{{ handle_name }}</p> -->
   </div>
 </template>
 
@@ -61,7 +61,8 @@ export default {
     // Odtworzenie SIDa
     // ==========================================================
     Link: function() {
-      var query = "http://localhost:8099/api/v1/audio?sid_url=" + this.sid_link;
+      // var query = "http://34.89.198.158/api/v1/audio?sid_url=" + this.sid_link;
+      var query = "http://localhost/api/v1/audio?sid_url=" + this.sid_link;
       // eslint-disable-next-line
       console.log("Query = " + query);
 
