@@ -1,19 +1,31 @@
 <template>
   <div id="app">
-    <p>Welcome to SIDCloud</p>
+    <h1 class="display-4">Welcome to SIDCloud</h1>
 
-    <audio id="radio" controls preload="none">
+    <audio id="radio" controls preload="none" loop>
       <source src="http://localhost/api/v1/audio" type="audio/wav" />
     </audio>
     <p />
 
-    <input
-      class="form-control"
-      v-model="sid_link"
-      v-on:keyup.enter="Link"
-      placeholder="Type SID or PRG file link"
-    />
-    <p>{{ sid_data }}</p>
+    <div class="input-group">
+      <input
+        v-model="sid_link"
+        style="margin-left: 20px"
+        v-on:keyup.enter="Link"
+        placeholder="Paste SID or PRG file link and press Enter to play"
+        class="form-control"
+      />
+      <div class="input-group-append" id="button-addon4">
+        <button
+          type="button"
+          style="margin-right: 20px; margin-left: 5px"
+          class="btn btn-success"
+          v-on:click="Link"
+        >Stream Go...</button>
+      </div>
+    </div>
+
+    <div class="alert alert-light" role="alert">{{ sid_data }}</div>
 
     <!-- <input
       class="form-control"
@@ -21,7 +33,7 @@
       v-on:keyup.enter="Handle"
       placeholder="Type scener handle"
     />
-    <p>{{ handle_name }}</p> -->
+    <p>{{ handle_name }}</p>-->
   </div>
 </template>
 
