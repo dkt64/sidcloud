@@ -3,7 +3,7 @@
     <h1 class="display-4">Welcome to SIDCloud</h1>
 
     <audio id="radio" controls preload="none" loop>
-      <source src="http://localhost/api/v1/audio" type="audio/wav" />
+      <source src="http://sidcloud.net/api/v1/audio" type="audio/wav" />
     </audio>
     <p />
 
@@ -74,7 +74,7 @@ export default {
     // ==========================================================
     Link: function() {
       // var query = "http://34.89.198.158/api/v1/audio?sid_url=" + this.sid_link;
-      var query = "http://localhost/api/v1/audio?sid_url=" + this.sid_link;
+      var query = "http://sidcloud.net/api/v1/audio?sid_url=" + this.sid_link;
       // eslint-disable-next-line
       console.log("Query = " + query);
 
