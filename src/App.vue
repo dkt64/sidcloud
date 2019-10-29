@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @drop.prevent="addFile" @dragover.prevent>
     <h1 class="display-4">Welcome to SIDCloud</h1>
 
     <audio id="radio" controls preload="none" loop>
@@ -28,7 +28,7 @@
     </div>
 
     <p />
-    
+
     <div class="alert alert-light" role="alert">{{ sid_data }}</div>
 
     <!-- <input
@@ -52,12 +52,39 @@ export default {
       info: null,
       sid_link: null,
       sid_data: null,
-      query_url: ""
+      query_url: "",
+      file: null
     };
   },
   name: "app",
   components: {},
   methods: {
+    // ==========================================================
+    // Drag & Drop
+    // ==========================================================
+    addFile(e) {
+      var query = "http://sidcloud.net/api/v1/audio";
+      // var query = "http://localhost/api/v1/audio";
+
+      var player = document.getElementById("radio");
+      player.pause();
+      player.currentTime = 0.0;
+
+      const formData = new FormData();
+      formData.append('file', e.dataTransfer.files[0]);
+
+      const config = {
+        headers: { "content-type": e.dataTransfer.files[0].type }
+      };
+
+      axios.put(query, formData, config).then(response => {
+        // eslint-disable-next-line
+        console.log("File sent. Response: ", response.data);
+
+        player.load();
+        player.play();
+      });
+    },
     // ==========================================================
     // Odczyt danych o scenerze
     // ==========================================================
@@ -83,7 +110,6 @@ export default {
       console.log("Query = " + query);
 
       var player = document.getElementById("radio");
-
       player.pause();
       player.currentTime = 0.0;
 
@@ -96,10 +122,6 @@ export default {
         player.load();
         player.play();
       });
-
-      // player.currentTime = 0.0;
-      // player.pause();
-      // player.currentTime = 0.0;
     }
   }
 };
