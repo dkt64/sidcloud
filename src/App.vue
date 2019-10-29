@@ -1,6 +1,6 @@
 <template>
   <div id="app" @drop.prevent="addFile" @dragover.prevent>
-    <h1 class="display-4">Welcome to SIDCloud</h1>
+    <h3 class="display-4">Welcome to SIDCloud</h3>
 
     <audio id="radio" controls preload="none" loop>
       <source src="http://sidcloud.net/api/v1/audio" type="audio/wav" />
@@ -14,7 +14,7 @@
         v-model="sid_link"
         style="margin-left: 20px"
         v-on:keyup.enter="Link"
-        placeholder="Paste SID or PRG file link and press Enter to play"
+        placeholder="Paste SID/PRG link and press Enter to play or Drag your SID/PRG file here"
         class="form-control"
       />
       <div class="input-group-append" id="button-addon4">
