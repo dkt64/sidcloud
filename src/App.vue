@@ -3,8 +3,8 @@
     <h3 class="display-4">Welcome to SIDCloud</h3>
 
     <audio id="radio" controls preload="none" loop>
-      <source src="http://sidcloud.net/api/v1/audio" type="audio/wav" />
-      <!-- <source src="http://localhost/api/v1/audio" type="audio/wav" /> -->
+      <!-- <source src="http://sidcloud.net/api/v1/audio" type="audio/wav" /> -->
+      <source src="http://localhost/api/v1/audio" type="audio/wav" />
     </audio>
 
     <p />
@@ -63,8 +63,8 @@ export default {
     // Drag & Drop
     // ==========================================================
     addFile(e) {
-      var query = "http://sidcloud.net/api/v1/audio";
-      // var query = "http://localhost/api/v1/audio";
+      // var query = "http://sidcloud.net/api/v1/audio";
+      var query = "http://localhost/api/v1/audio";
 
       var player = document.getElementById("radio");
       player.pause();
@@ -104,8 +104,8 @@ export default {
     // Odtworzenie SIDa
     // ==========================================================
     Link: function() {
-      var query = "http://sidcloud.net/api/v1/audio?sid_url=" + this.sid_link;
-      // var query = "http://localhost/api/v1/audio?sid_url=" + this.sid_link;
+      // var query = "http://sidcloud.net/api/v1/audio?sid_url=" + this.sid_link;
+      var query = "http://localhost/api/v1/audio?sid_url=" + this.sid_link;
       // eslint-disable-next-line
       console.log("Query = " + query);
 
