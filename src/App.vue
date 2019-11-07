@@ -3,8 +3,8 @@
     <h3 class="display-4">Welcome to SIDCloud</h3>
 
     <audio id="radio" controls preload="none" loop>
-      <!-- <source src="http://sidcloud.net/api/v1/audio" type="audio/wav" /> -->
-      <source src="http://localhost/api/v1/audio" type="audio/wav" />
+      <source src="http://sidcloud.net/api/v1/audio" type="audio/wav" />
+      <!-- <source src="http://localhost/api/v1/audio" type="audio/wav" /> -->
     </audio>
 
     <p />
@@ -63,15 +63,15 @@ export default {
     // Drag & Drop
     // ==========================================================
     addFile(e) {
-      // var query = "http://sidcloud.net/api/v1/audio";
-      var query = "http://localhost/api/v1/audio";
+      var query = "http://sidcloud.net/api/v1/audio";
+      // var query = "http://localhost/api/v1/audio";
 
       var player = document.getElementById("radio");
       player.pause();
       player.currentTime = 0.0;
 
       const formData = new FormData();
-      formData.append('file', e.dataTransfer.files[0]);
+      formData.append("file", e.dataTransfer.files[0]);
 
       const config = {
         headers: { "content-type": e.dataTransfer.files[0].type }
@@ -80,6 +80,8 @@ export default {
       axios.put(query, formData, config).then(response => {
         // eslint-disable-next-line
         console.log("File sent. Response: ", response.data);
+
+        this.sid_data = response.data;
 
         player.load();
         player.play();
@@ -101,11 +103,11 @@ export default {
     },
 
     // ==========================================================
-    // Odtworzenie SIDa
+    // Link do SIDa
     // ==========================================================
     Link: function() {
-      // var query = "http://sidcloud.net/api/v1/audio?sid_url=" + this.sid_link;
-      var query = "http://localhost/api/v1/audio?sid_url=" + this.sid_link;
+      var query = "http://sidcloud.net/api/v1/audio?sid_url=" + this.sid_link;
+      // var query = "http://localhost/api/v1/audio?sid_url=" + this.sid_link;
       // eslint-disable-next-line
       console.log("Query = " + query);
 
