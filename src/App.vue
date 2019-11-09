@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @drop.prevent="addFile" @dragover.prevent>
+  <div id="app" @drop.prevent="addFile" @dragover.prevent @dragover.capture="dragingOn" @drop.capture="dragingOff"> 
     <h3 class="display-4">Welcome to SIDCloud</h3>
 
     <audio id="radio" controls preload="none" loop>
@@ -16,12 +16,14 @@
         v-on:keyup.enter="Link"
         placeholder="Paste SID/PRG link and press Enter to play or Drag your SID/PRG file here"
         class="form-control"
+        :disabled="dragin"
       />
       <div class="input-group-append" id="button-addon4">
         <button
           type="button"
           style="margin-right: 20px; margin-left: 5px"
           class="btn btn-success"
+          :disabled="dragin"
           v-on:click="Link"
         >Stream Go...</button>
       </div>
@@ -53,12 +55,24 @@ export default {
       sid_link: null,
       sid_data: null,
       query_url: "",
-      file: null
+      file: null,
+      dragin: false,
     };
   },
   name: "app",
   components: {},
   methods: {
+    // ==========================================================
+    // Draging
+    // ==========================================================
+    dragingOn() {
+      // this.sid_data = "dragin..";
+      this.dragin = true
+    },
+    dragingOff() {
+      // this.sid_data = "dragin..";
+      this.dragin = false
+    },
     // ==========================================================
     // Drag & Drop
     // ==========================================================
