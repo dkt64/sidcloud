@@ -51,6 +51,10 @@
     </div>
 
     <p />
+
+    <img :src="csdb_release_screenshot" />
+
+    <p />
     <p>{{ csdb_release_name }} {{ csdb_release_group }}</p>
     <!-- <p>Music by {{ csdb_release_credits }}</p> -->
 
@@ -58,8 +62,8 @@
 
     <!-- <p>CSDB release ID: {{ csdb_release_id }}</p>
     <p>CSDB release download links: {{ csdb_download_links }}</p>
-    <p>CSDB release: {{ csdb_release }}</p>
-    <p>CSDB release data: {{ csdb_release_data }}</p>-->
+    <p>CSDB release: {{ csdb_release }}</p>-->
+    <!-- <p>CSDB release data: {{ csdb_release_data }}</p> -->
   </div>
 </template>
 
@@ -82,6 +86,7 @@ export default {
       csdb_release_name: "",
       csdb_release_group: "",
       csdb_release_credits: "",
+      csdb_release_screenshot: "",
       release_nr: 1,
       info: null,
       sid_link: null,
@@ -159,6 +164,11 @@ export default {
     // ==========================================================
     GetCSDBData: function() {
       var query;
+
+      this.csdb_release_name = "";
+      this.csdb_release_group = "";
+      this.csdb_release_credits = "";
+      this.csdb_release_screenshot = "";
 
       // Latest releases
       // --------------------------------------------------------
@@ -311,17 +321,25 @@ export default {
                   .getElementsByTagName("Name")[i].childNodes[0].nodeValue;
             }
 
-            // Credits
-            var credits_count = (
-              this.csdb_release_data.match(/<Credit>/g) || []
-            ).length;
+            // Screenshot
+            this.csdb_release_screenshot = oParser
+              .parseFromString(this.csdb_release_data, "application/xml")
+              .getElementsByTagName("ScreenShot")[0].childNodes[0].nodeValue;
             // eslint-disable-next-line
-            console.log("Liczba credits: " + groups_count);
+            console.log("Screenshot: " + this.csdb_release_screenshot);
+
+            // // Credits
+            // var credits_count = (
+            //   this.csdb_release_data.match(/<Credit>/g) || []
+            // ).length;
+            // // eslint-disable-next-line
+            // console.log("Liczba credits: " + groups_count);
 
             // this.csdb_release_credits = oParser
             //   .parseFromString(this.csdb_release_data, "application/xml")
             //   .getElementsByTagName("Handle")[0].childNodes[0].nodeValue;
           } else {
+            // Jeżeli nie znaleziono SIDa to idziemy do kolejnej produkcji
             this.GetCSDBData();
           }
         });
