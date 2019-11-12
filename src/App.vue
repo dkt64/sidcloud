@@ -16,7 +16,6 @@
 
     <audio id="radio" controls preload="none" loop>
       <source src="http://sidcloud.net/api/v1/audio" type="audio/wav" />
-      <!-- <source src="http://localhost/api/v1/audio" type="audio/wav" /> -->
     </audio>
 
     <p />
@@ -128,7 +127,6 @@ export default {
     // ==========================================================
     addFile(e) {
       var query = "http://sidcloud.net/api/v1/audio";
-      // var query = "http://localhost/api/v1/audio";
 
       var player = document.getElementById("radio");
       player.pause();
@@ -147,8 +145,6 @@ export default {
 
         this.response_from_server = response.data;
 
-        player.src = "";
-        player.src = "http://sidcloud.net/api/v1/audio";
         player.load();
         player.play();
       });
@@ -172,7 +168,7 @@ export default {
 
       // Latest releases
       // --------------------------------------------------------
-      query = "https://csdb.dk/rss/latestreleases.php";
+      query = "http://sidcloud.net/api/v1/csdb_releases";
 
       axios.get(query).then(response => {
         this.csdb_releases = response.data;
@@ -239,11 +235,11 @@ export default {
         // -------------------------------------------------------------------
 
         query =
-          "https://csdb.dk/webservice/?type=release&id=" +
+          "http://sidcloud.net/api/v1/csdb_release?id=" +
           this.csdb_release_id +
           "&depth=2";
 
-        axios.get(query).then(response => {
+        axios.post(query).then(response => {
           this.csdb_release_data = response.data;
 
           // var oParser = new DOMParser();
@@ -351,7 +347,6 @@ export default {
     // ==========================================================
     Link: function() {
       var query = "http://sidcloud.net/api/v1/audio?sid_url=" + this.sid_link;
-      // var query = "http://localhost/api/v1/audio?sid_url=" + this.sid_link;
       // eslint-disable-next-line
       console.log("Query = " + query);
 
