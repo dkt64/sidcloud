@@ -12,7 +12,11 @@
     @dragover.capture="dragingOn"
     @drop.capture="dragingOff"
   >
-    <h1>Welcome to SIDCloud</h1>
+    <!-- <h1>Welcome to SIDCloud</h1> -->
+    <img :src="csdb_release_screenshot" />
+    <p />
+    <p>{{ csdb_release_name }} {{ csdb_release_group }}</p>
+    <p />
 
     <audio id="radio" controls preload="none" loop>
       <source src="http://sidcloud.net/api/v1/audio" type="audio/wav" />
@@ -20,41 +24,40 @@
 
     <p />
 
-    <div class="input-group">
-      <input
-        v-model="sid_link"
-        style="margin-left: 20px"
-        v-on:keyup.enter="Link"
-        placeholder="Paste SID/PRG link and press Enter to play or Drag your SID/PRG file here"
-        class="form-control"
-        :disabled="dragin"
-      />
-      <div class="input-group-append" id="button-addon4">
-        <button
-          type="button"
-          style="margin-right: 10px; margin-left: 10px"
-          class="btn btn-success"
+    <b-container class="bv-example-row">
+      <b-row class="my-1">
+        <b-col sm="3">
+          <button
+            type="button"
+            style="margin-right: 10px; margin-left: 10px"
+            class="btn btn-success"
+            :disabled="dragin"
+            v-on:click="Link"
+          >Load and stream</button>
+        </b-col>
+        <b-col sm="3">
+          <button
+            type="button"
+            style="margin-right: 20px"
+            class="btn btn-success"
+            :disabled="dragin"
+            v-on:click="Next"
+          >Goto next release</button>
+        </b-col>
+      </b-row>
+      <p />
+      <b-col sm="3">
+        <input
+          v-model="sid_link"
+          v-on:keyup.enter="Link"
+          placeholder="Paste SID/PRG link and press Enter to play or Drag your SID/PRG file here"
+          class="form-control"
+          style="max-width=300px"
           :disabled="dragin"
-          v-on:click="Link"
-        >Stream SID...</button>
-      </div>
-      <div class="input-group-append" id="button-addon4">
-        <button
-          type="button"
-          style="margin-right: 20px"
-          class="btn btn-success"
-          :disabled="dragin"
-          v-on:click="Next"
-        >Next release</button>
-      </div>
-    </div>
+        />
+      </b-col>
+    </b-container>
 
-    <p />
-
-    <img :src="csdb_release_screenshot" />
-
-    <p />
-    <p>{{ csdb_release_name }} {{ csdb_release_group }}</p>
     <!-- <p>Music by {{ csdb_release_credits }}</p> -->
 
     <!-- <p>Response from sidcloud server: {{ response_from_server }}</p> -->
@@ -169,6 +172,9 @@ export default {
       // Latest releases
       // --------------------------------------------------------
       query = "http://sidcloud.net/api/v1/csdb_releases";
+
+      // eslint-disable-next-line
+      console.log("GetCSDBData() " + query);
 
       axios.get(query).then(response => {
         this.csdb_releases = response.data;
