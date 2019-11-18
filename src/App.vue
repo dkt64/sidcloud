@@ -367,7 +367,12 @@ export default {
         console.log("SID data " + this.response_from_server);
 
         player.load();
-        player.play();
+        player.addEventListener("canplay", event => {
+          // eslint-disable-next-line
+          console.log("Can play event :) at time ", event.timeStamp);
+
+          player.play();
+        });
       });
     }
   }
