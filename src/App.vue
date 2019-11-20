@@ -12,7 +12,7 @@
     @dragover.capture="dragingOn"
     @drop.capture="dragingOff"
   >
-    <!-- <h1>Welcome to SIDCloud</h1> -->
+    <h1>Welcome to SIDCloud</h1>
     <img :src="csdb_release_screenshot" />
     <p />
     <p>{{ csdb_release_name }} {{ csdb_release_group }}</p>
@@ -21,6 +21,14 @@
     <audio id="radio" controls preload="none" loop>
       <source src="http://sidcloud.net/api/v1/audio" type="audio/wav" />
     </audio>
+    <!-- <audio
+      type="audio/wav"
+      id="radio"
+      src="http://sidcloud.net/api/v1/audio"
+      preload="none"
+      controls
+      loop
+    ></audio>-->
 
     <p />
 
@@ -58,6 +66,7 @@
       </b-col>
     </b-container>
 
+    <div id="log">{{ log }}</div>
     <!-- <p>Music by {{ csdb_release_credits }}</p> -->
 
     <!-- <p>Response from sidcloud server: {{ response_from_server }}</p> -->
@@ -95,7 +104,8 @@ export default {
       response_from_server: null,
       query_url: "",
       file: null,
-      dragin: false
+      dragin: false,
+      log: "log"
     };
   },
   name: "app",
@@ -356,23 +366,94 @@ export default {
       // eslint-disable-next-line
       console.log("Query = " + query);
 
+      document.getElementById("log").innerHTML = "[" + Date.now() + "] start  ";
+
       var player = document.getElementById("radio");
       player.pause();
       player.currentTime = 0.0;
+
+      // var player = new Audio();
+      // player.src = "http://sidcloud.net/api/v1/audio";
+      // player.load();
+
+      // player.addEventListener("timeupdate", function() {
+      //   // eslint-disable-next-line
+      //   console.log("player event: timeupdate");
+      // });
+
+      player.addEventListener("waiting", function() {
+        // eslint-disable-next-line
+        console.log("player event: waiting");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] waiting  ";
+      });
+      player.addEventListener("play", function() {
+        // eslint-disable-next-line
+        console.log("player event: play");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] play  ";
+      });
+      player.addEventListener("pause", function() {
+        // eslint-disable-next-line
+        console.log("player event: pause");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] pause  ";
+      });
+      player.addEventListener("ended", function() {
+        // eslint-disable-next-line
+        console.log("player event: ended");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] ended  ";
+      });
+      player.addEventListener("loadstart", function() {
+        // eslint-disable-next-line
+        console.log("player event: loadstart");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] loadstart  ";
+      });
+      player.addEventListener("durationchange", function() {
+        // eslint-disable-next-line
+        console.log("player event: durationchange");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] durationchange  ";
+      });
+      player.addEventListener("loadedmetadata", function() {
+        // eslint-disable-next-line
+        console.log("player event: loadedmetadata");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] loadedmetadata  ";
+      });
+      player.addEventListener("loadeddata", function() {
+        // eslint-disable-next-line
+        console.log("player event: loadeddata");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] loadeddata  ";
+      });
+      // player.addEventListener("progress", function() {
+      //   // eslint-disable-next-line
+      //   console.log("player event: progress");
+      // });
+      player.addEventListener("canplay", function() {
+        // eslint-disable-next-line
+        console.log("player event: canplay");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] canplay  ";
+        // player.play();
+      });
+      player.addEventListener("canplaythrough", function() {
+        // eslint-disable-next-line
+        console.log("player event: canplaythrough");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] canplaythrough  ";
+      });
 
       axios.post(query).then(response => {
         this.response_from_server = response.data;
 
         // eslint-disable-next-line
         console.log("SID data " + this.response_from_server);
-
         player.load();
-        player.addEventListener("canplay", event => {
-          // eslint-disable-next-line
-          console.log("Can play event :) at time ", event.timeStamp);
-
-          player.play();
-        });
+        player.play();
       });
     }
   }
