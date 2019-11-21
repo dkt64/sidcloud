@@ -18,9 +18,14 @@
     <p>{{ csdb_release_name }} {{ csdb_release_group }}</p>
     <p />
 
-    <audio id="radio" controls preload="none" loop>
-      <source src="http://sidcloud.net/api/v1/audio" type="audio/wav" />
-    </audio>
+    <audio
+      type="audio/wav"
+      :src="audio_src"
+      id="radio"
+      controls
+      preload="none"
+      loop
+    >Audio element is not supported on Your browser :(</audio>
     <!-- <audio
       type="audio/wav"
       id="radio"
@@ -105,7 +110,9 @@ export default {
       query_url: "",
       file: null,
       dragin: false,
-      log: "log"
+      log: "log",
+      audio_src_org: "http://sidcloud.net/api/v1/audio",
+      audio_src: "http://sidcloud.net/api/v1/audio"
     };
   },
   name: "app",
@@ -438,7 +445,7 @@ export default {
         console.log("player event: canplay");
         document.getElementById("log").innerHTML +=
           "[" + Date.now() + "] canplay  ";
-        // player.play();
+        player.play();
       });
       player.addEventListener("canplaythrough", function() {
         // eslint-disable-next-line
@@ -450,10 +457,14 @@ export default {
       axios.post(query).then(response => {
         this.response_from_server = response.data;
 
+        // prygotowanie nazwy pliku
+        this.audio_src =
+          this.audio_src_org + "/" + this.response_from_server + ".wav";
+
         // eslint-disable-next-line
-        console.log("SID data " + this.response_from_server);
+        console.log("SID data " + this.audio_src);
         player.load();
-        player.play();
+        // player.play();
       });
     }
   }
