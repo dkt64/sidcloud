@@ -18,14 +18,9 @@
     <p>{{ csdb_release_name }} {{ csdb_release_group }}</p>
     <p />
 
-    <!-- <audio
-      type="audio/wav"
-      :src="audio_src"
-      id="radio"
-      controls
-      preload="none"
-      loop
-    >Audio element is not supported on Your browser :(</audio>-->
+    <audio id="radio" controls preload="none" loop>
+      <source src="http://sidcloud.net/api/v1/audio" type="audio/wav" />
+    </audio>
     <!-- <audio
       type="audio/wav"
       id="radio"
@@ -51,20 +46,11 @@
         <b-col sm="3">
           <button
             type="button"
-            style="margin-right: 10px; margin-left: 10px"
+            style="margin-right: 20px"
             class="btn btn-success"
             :disabled="dragin"
             v-on:click="Next"
           >Goto next release</button>
-        </b-col>
-        <b-col sm="3">
-          <button
-            type="button"
-            style="margin-right: 10px; margin-left: 10px"
-            class="btn btn-success"
-            :disabled="dragin"
-            v-on:click="Pause"
-          >Pause/Play</button>
         </b-col>
       </b-row>
       <p />
@@ -80,7 +66,7 @@
       </b-col>
     </b-container>
 
-    <!-- <div id="log">{{ log }}</div> -->
+    <div id="log">{{ log }}</div>
     <!-- <p>Music by {{ csdb_release_credits }}</p> -->
 
     <!-- <p>Response from sidcloud server: {{ response_from_server }}</p> -->
@@ -98,26 +84,6 @@
 // ================================================================================================
 
 import axios from "axios";
-import { Howl } from "howler";
-
-// var stream_url = "";
-
-// var sound = new Howl({
-//   src: [stream_url],
-//   html5: true
-//   // format: ["wav"],
-//   // onload: () => console.log("onload"),
-//   // onloaderror: (e, msg) => console.log("onloaderror", e, msg),
-//   // onplayerror: (e, msg) => console.log("onplayerror", e, msg),
-//   // onplay: () => console.log("onplay"),
-//   // onend: () => console.log("onend"),
-//   // onpause: () => console.log("onpause"),
-//   // onrate: () => console.log("onrate"),
-//   // onstop: () => console.log("onstop"),
-//   // onseek: () => console.log("onseek"),
-//   // onfade: () => console.log("onfade"),
-//   // onunlock: () => console.log("onunlock")
-// });
 
 export default {
   data: function() {
@@ -139,14 +105,7 @@ export default {
       query_url: "",
       file: null,
       dragin: false,
-      log: "log",
-      audio_src_org: "http://sidcloud.net/api/v1/audio",
-      audio_src: "http://sidcloud.net/api/v1/audio",
-      sound: new Howl({
-        src: ["http://sidcloud.net/api/v1/audio"],
-        format: ["wav"],
-        html5: true
-      })
+      log: "log"
     };
   },
   name: "app",
@@ -208,16 +167,6 @@ export default {
     // ==========================================================
     Next: function() {
       this.GetCSDBData();
-    },
-    // ==========================================================
-    // Pauza/play
-    // ==========================================================
-    Pause: function() {
-      if (this.sound.playing()) {
-        this.sound.pause();
-      } else {
-        this.sound.play();
-      }
     },
     // ==========================================================
     // Odczyt danych z CSDB
@@ -417,120 +366,95 @@ export default {
       // eslint-disable-next-line
       console.log("Query = " + query);
 
+      document.getElementById("log").innerHTML = "[" + Date.now() + "] start  ";
+
+      var player = document.getElementById("radio");
+      player.pause();
+      player.currentTime = 0.0;
+
+      // var player = new Audio();
+      // player.src = "http://sidcloud.net/api/v1/audio";
+      // player.load();
+
+      // player.addEventListener("timeupdate", function() {
+      //   // eslint-disable-next-line
+      //   console.log("player event: timeupdate");
+      // });
+
+      player.addEventListener("waiting", function() {
+        // eslint-disable-next-line
+        console.log("player event: waiting");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] waiting  ";
+      });
+      player.addEventListener("play", function() {
+        // eslint-disable-next-line
+        console.log("player event: play");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] play  ";
+      });
+      player.addEventListener("pause", function() {
+        // eslint-disable-next-line
+        console.log("player event: pause");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] pause  ";
+      });
+      player.addEventListener("ended", function() {
+        // eslint-disable-next-line
+        console.log("player event: ended");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] ended  ";
+      });
+      player.addEventListener("loadstart", function() {
+        // eslint-disable-next-line
+        console.log("player event: loadstart");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] loadstart  ";
+      });
+      player.addEventListener("durationchange", function() {
+        // eslint-disable-next-line
+        console.log("player event: durationchange");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] durationchange  ";
+      });
+      player.addEventListener("loadedmetadata", function() {
+        // eslint-disable-next-line
+        console.log("player event: loadedmetadata");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] loadedmetadata  ";
+      });
+      player.addEventListener("loadeddata", function() {
+        // eslint-disable-next-line
+        console.log("player event: loadeddata");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] loadeddata  ";
+      });
+      // player.addEventListener("progress", function() {
+      //   // eslint-disable-next-line
+      //   console.log("player event: progress");
+      // });
+      player.addEventListener("canplay", function() {
+        // eslint-disable-next-line
+        console.log("player event: canplay");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] canplay  ";
+        // player.play();
+      });
+      player.addEventListener("canplaythrough", function() {
+        // eslint-disable-next-line
+        console.log("player event: canplaythrough");
+        document.getElementById("log").innerHTML +=
+          "[" + Date.now() + "] canplaythrough  ";
+      });
+
       axios.post(query).then(response => {
         this.response_from_server = response.data;
 
-        // prygotowanie nazwy pliku
-        // var url = this.audio_src_org + "/" + this.response_from_server + ".wav";
-
         // eslint-disable-next-line
-        // console.log("Play " + url);
-
-        // if (this.sound.playing()) {
-        this.sound.stop();
-        this.sound.unload();
-        // }
-        this.sound.load();
-        this.sound.play();
+        console.log("SID data " + this.response_from_server);
+        player.load();
+        player.play();
       });
-
-      // var query = "http://sidcloud.net/api/v1/audio?sid_url=" + this.sid_link;
-      // // eslint-disable-next-line
-      // console.log("Query = " + query);
-
-      // document.getElementById("log").innerHTML = "[" + Date.now() + "] start  ";
-
-      // var player = document.getElementById("radio");
-      // player.pause();
-      // player.currentTime = 0.0;
-
-      // // var player = new Audio();
-      // // player.src = "http://sidcloud.net/api/v1/audio";
-      // // player.load();
-
-      // // player.addEventListener("timeupdate", function() {
-      // //   // eslint-disable-next-line
-      // //   console.log("player event: timeupdate");
-      // // });
-
-      // player.addEventListener("waiting", function() {
-      //   // eslint-disable-next-line
-      //   console.log("player event: waiting");
-      //   document.getElementById("log").innerHTML +=
-      //     "[" + Date.now() + "] waiting  ";
-      // });
-      // player.addEventListener("play", function() {
-      //   // eslint-disable-next-line
-      //   console.log("player event: play");
-      //   document.getElementById("log").innerHTML +=
-      //     "[" + Date.now() + "] play  ";
-      // });
-      // player.addEventListener("pause", function() {
-      //   // eslint-disable-next-line
-      //   console.log("player event: pause");
-      //   document.getElementById("log").innerHTML +=
-      //     "[" + Date.now() + "] pause  ";
-      // });
-      // player.addEventListener("ended", function() {
-      //   // eslint-disable-next-line
-      //   console.log("player event: ended");
-      //   document.getElementById("log").innerHTML +=
-      //     "[" + Date.now() + "] ended  ";
-      // });
-      // player.addEventListener("loadstart", function() {
-      //   // eslint-disable-next-line
-      //   console.log("player event: loadstart");
-      //   document.getElementById("log").innerHTML +=
-      //     "[" + Date.now() + "] loadstart  ";
-      // });
-      // player.addEventListener("durationchange", function() {
-      //   // eslint-disable-next-line
-      //   console.log("player event: durationchange");
-      //   document.getElementById("log").innerHTML +=
-      //     "[" + Date.now() + "] durationchange  ";
-      // });
-      // player.addEventListener("loadedmetadata", function() {
-      //   // eslint-disable-next-line
-      //   console.log("player event: loadedmetadata");
-      //   document.getElementById("log").innerHTML +=
-      //     "[" + Date.now() + "] loadedmetadata  ";
-      // });
-      // player.addEventListener("loadeddata", function() {
-      //   // eslint-disable-next-line
-      //   console.log("player event: loadeddata");
-      //   document.getElementById("log").innerHTML +=
-      //     "[" + Date.now() + "] loadeddata  ";
-      // });
-      // // player.addEventListener("progress", function() {
-      // //   // eslint-disable-next-line
-      // //   console.log("player event: progress");
-      // // });
-      // player.addEventListener("canplay", function() {
-      //   // eslint-disable-next-line
-      //   console.log("player event: canplay");
-      //   document.getElementById("log").innerHTML +=
-      //     "[" + Date.now() + "] canplay  ";
-      //   player.play();
-      // });
-      // player.addEventListener("canplaythrough", function() {
-      //   // eslint-disable-next-line
-      //   console.log("player event: canplaythrough");
-      //   document.getElementById("log").innerHTML +=
-      //     "[" + Date.now() + "] canplaythrough  ";
-      // });
-
-      // axios.post(query).then(response => {
-      //   this.response_from_server = response.data;
-
-      //   // prygotowanie nazwy pliku
-      //   this.audio_src =
-      //     this.audio_src_org + "/" + this.response_from_server + ".wav";
-
-      //   // eslint-disable-next-line
-      //   console.log("SID data " + this.audio_src);
-      //   player.load();
-      //   // player.play();
-      // });
     }
   }
 };
