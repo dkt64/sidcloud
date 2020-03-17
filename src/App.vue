@@ -19,7 +19,7 @@
     <p />
 
     <audio id="radio" controls preload="none" loop>
-      <source src="http://sidcloud.net/api/v1/audio" type="audio/wav" />
+      <source :src="audio_url" type="audio/wav" />
     </audio>
     <!-- <audio
       type="audio/wav"
@@ -105,7 +105,8 @@ export default {
       query_url: "",
       file: null,
       dragin: false,
-      log: "log"
+      log: "log",
+      audio_url: axios.defaults.baseURL + "/api/v1/audio"
     };
   },
   name: "app",
@@ -139,7 +140,7 @@ export default {
     // Drag & Drop
     // ==========================================================
     addFile(e) {
-      var query = "http://sidcloud.net/api/v1/audio";
+      var query = "/api/v1/audio";
 
       var player = document.getElementById("radio");
       player.pause();
@@ -181,7 +182,7 @@ export default {
 
       // Latest releases
       // --------------------------------------------------------
-      query = "http://sidcloud.net/api/v1/csdb_releases";
+      query = "/api/v1/csdb_releases";
 
       // eslint-disable-next-line
       console.log("GetCSDBData() " + query);
@@ -250,10 +251,7 @@ export default {
         // Odczytujemy dane release i szukamy SID'a a potem PRG
         // -------------------------------------------------------------------
 
-        query =
-          "http://sidcloud.net/api/v1/csdb_release?id=" +
-          this.csdb_release_id +
-          "&depth=2";
+        query = "/api/v1/csdb_release?id=" + this.csdb_release_id + "&depth=2";
 
         axios.post(query).then(response => {
           this.csdb_release_data = response.data;
@@ -362,7 +360,7 @@ export default {
     // Link do SIDa
     // ==========================================================
     Link: function() {
-      var query = "http://sidcloud.net/api/v1/audio?sid_url=" + this.sid_link;
+      var query = "/api/v1/audio?sid_url=" + this.sid_link;
       // eslint-disable-next-line
       console.log("Query = " + query);
 
