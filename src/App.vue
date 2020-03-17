@@ -18,7 +18,7 @@
     <p>{{ csdb_release_name }} {{ csdb_release_group }}</p>
     <p />
 
-    <audio id="radio" controls preload="none" loop>
+    <audio id="radio" controls preload="none">
       <source :src="audio_url" type="audio/wav" />
     </audio>
     <!-- <audio
@@ -85,6 +85,8 @@
 
 import axios from "axios";
 
+var player;
+
 export default {
   data: function() {
     return {
@@ -102,11 +104,10 @@ export default {
       info: null,
       sid_link: null,
       response_from_server: null,
-      query_url: "",
       file: null,
       dragin: false,
       log: "log",
-      audio_url: axios.defaults.baseURL + "/api/v1/audio"
+      audio_url: ""
     };
   },
   name: "app",
@@ -118,6 +119,16 @@ export default {
 
   created: function() {
     this.GetCSDBData();
+    player = document.getElementById("radio");
+
+    if (
+      axios.defaults.baseURL == null ||
+      axios.defaults.baseURL === undefined
+    ) {
+      this.audio_url = "/api/v1/audio";
+    } else {
+      this.audio_url = axios.defaults.baseURL + "/api/v1/audio";
+    }
   },
 
   // ==============================================================================================
@@ -140,9 +151,10 @@ export default {
     // Drag & Drop
     // ==========================================================
     addFile(e) {
+      player = document.getElementById("radio");
       var query = "/api/v1/audio";
 
-      var player = document.getElementById("radio");
+      // var player = document.getElementById("radio");
       player.pause();
       player.currentTime = 0.0;
 
@@ -360,13 +372,14 @@ export default {
     // Link do SIDa
     // ==========================================================
     Link: function() {
+      player = document.getElementById("radio");
+
       var query = "/api/v1/audio?sid_url=" + this.sid_link;
       // eslint-disable-next-line
       console.log("Query = " + query);
 
       document.getElementById("log").innerHTML = "[" + Date.now() + "] start  ";
 
-      var player = document.getElementById("radio");
       player.pause();
       player.currentTime = 0.0;
 
@@ -436,7 +449,9 @@ export default {
         console.log("player event: canplay");
         document.getElementById("log").innerHTML +=
           "[" + Date.now() + "] canplay  ";
-        // player.play();
+        player.play();
+        // eslint-disable-next-line
+        console.log("Play.");
       });
       player.addEventListener("canplaythrough", function() {
         // eslint-disable-next-line
@@ -450,8 +465,14 @@ export default {
 
         // eslint-disable-next-line
         console.log("SID data " + this.response_from_server);
+
         player.load();
-        player.play();
+        // eslint-disable-next-line
+        console.log("Load.");
+
+        // player.play();
+        // eslint-disable-next-line
+        // console.log("Play.");
       });
     }
   }
