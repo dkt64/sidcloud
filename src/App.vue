@@ -33,6 +33,12 @@
     <p />
 
     <b-container class="bv-example-row">
+      Player:
+      <select v-model="player_type">
+        <option>sidplayfp</option>
+        <option>jsidplay2</option>
+      </select>
+
       <b-row class="my-1">
         <b-col sm="3">
           <button
@@ -107,35 +113,32 @@ export default {
       file: null,
       dragin: false,
       log: "log",
-      audio_url: ""
+      audio_url: "",
+      player_type: "sidplayfp"
     };
   },
   name: "app",
   components: {},
 
   // ==============================================================================================
-  // METODY VUE
-  // ==============================================================================================
-
-  created: function() {
-    this.GetCSDBData();
-    player = document.getElementById("radio");
-
-    if (
-      axios.defaults.baseURL == null ||
-      axios.defaults.baseURL === undefined
-    ) {
-      this.audio_url = "/api/v1/audio";
-    } else {
-      this.audio_url = axios.defaults.baseURL + "/api/v1/audio";
-    }
-  },
-
-  // ==============================================================================================
   // METODY
   // ==============================================================================================
 
   methods: {
+    AudioUrl() {
+      // eslint-disable-next-line
+      console.log("Player type: ", this.player_type);
+
+      if (
+        axios.defaults.baseURL == null ||
+        axios.defaults.baseURL === undefined
+      ) {
+        this.audio_url = "/api/v1/audio/" + this.player_type;
+      } else {
+        this.audio_url =
+          axios.defaults.baseURL + "/api/v1/audio/" + this.player_type;
+      }
+    },
     // ==========================================================
     // Draging
     // ==========================================================
@@ -151,8 +154,10 @@ export default {
     // Drag & Drop
     // ==========================================================
     addFile(e) {
+      this.AudioUrl();
       player = document.getElementById("radio");
-      var query = "/api/v1/audio";
+
+      var query = "/api/v1/audio" + this.player_type;
 
       // var player = document.getElementById("radio");
       player.pause();
@@ -372,6 +377,7 @@ export default {
     // Link do SIDa
     // ==========================================================
     Link: function() {
+      this.AudioUrl();
       player = document.getElementById("radio");
 
       var query = "/api/v1/audio?sid_url=" + this.sid_link;
@@ -451,7 +457,7 @@ export default {
           "[" + Date.now() + "] canplay  ";
         player.play();
         // eslint-disable-next-line
-        console.log("Play.");
+        console.log("Playing...");
       });
       player.addEventListener("canplaythrough", function() {
         // eslint-disable-next-line
@@ -468,13 +474,22 @@ export default {
 
         player.load();
         // eslint-disable-next-line
-        console.log("Load.");
+        console.log("Loading...");
 
         // player.play();
         // eslint-disable-next-line
         // console.log("Play.");
       });
     }
+  },
+  // ==============================================================================================
+  // METODY VUE
+  // ==============================================================================================
+
+  created: function() {
+    this.GetCSDBData();
+    player = document.getElementById("radio");
+    this.AudioUrl();
   }
 };
 </script>
